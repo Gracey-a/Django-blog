@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Elegant Blog{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* Base styles */
+    body {
+        font-family: 'Inter', sans-serif;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    /* Dark mode (default) */
+    body {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: #f5f5f5;
+    }
+
+    /* Light mode */
+    html.light body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        color: #1f2937;
+    }
+
+    /* Your other styles (glass-card, etc.) stay the same */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);
+    }
+
+    /* Light mode overrides for glass-card */
+    html.light .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+    }
+    html.light .glass-card:hover {
+        box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+    }
+
+    /* Input styling */
+    input, textarea, select {
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        color: white !important;
+    }
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #a78bfa !important;
+        ring: 2px solid #a78bfa;
+    }
+
+    html.light input, html.light textarea, html.light select {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
+        color: #1f2937 !important;
+    }
+
+    /* Other elements (toast, profile-img, etc.) */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(10px);
+        padding: 12px 24px;
+        border-radius: 40px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    }
+    html.light .toast {
+        background: rgba(0,0,0,0.8);
+        color: white;
+    }
+
+    .welcome-modal {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 16px 24px;
+        border-radius: 50px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        z-index: 1001;
+        animation: fadeSlideDown 0.5s ease;
+    }
+    html.light .welcome-modal {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes fadeSlideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dark/Light adaptable card */
+    .dark-card {
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;  
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #f5f5f5;
+    }
+    html.light .dark-card {
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        color: #1f2937;
+    }
+
+    /* Dark mode CKEditor */
+    html:not(.light) .cke_editable {
+        background-color: #1f2937 !important;
+        color: #f5f5f5 !important;
+    }
+    html.light .cke_editable {
+        background-color: white !important;
+        color: #1f2937 !important;
+    }
+</style>
+    {% block extra_css %}{% endblock %}
+    <style>
+    /* Light mode overrides */
+    html.light body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        color: #1f2937;
+    }
+    html.light .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+    }
+    html.light .glass-card:hover {
+        box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+    }
+    html.light input, html.light textarea, html.light select {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
+        color: #1f2937 !important;
+    }
+    html.light .profile-img {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    html.light .toast {
+        background: rgba(0,0,0,0.8);
+        color: white;
+    }
+    html.light .welcome-modal {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    /* Adjust any other text colors as needed */
+    html.light .text-gray-300 { color: #4b5563; }
+    html.light .text-gray-400 { color: #6b7280; }
+    html.light .text-gray-500 { color: #9ca3af; }
+    html.light .text-gray-600 { color: #d1d5db; }
+    html.light .text-purple-300 { color: #8b5cf6; }
+    html.light .text-purple-300:hover { color: #7c3aed; }
+</style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="glass-card sticky top-0 z-50 mx-2 sm:mx-4 mt-2 sm:mt-4 px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl">✨</span>
+            <a href="/" class="text-xl font-semibold tracking-tight">Elegant Blog</a>
+        </div>
+        <div class="flex items-center flex-wrap justify-center gap-3 sm:gap-4">
+            <button id="theme-toggle" class="text-gray-300 hover:text-purple-300 transition focus:outline-none text-lg">
+                🌙
+            </button>
+            <a href="/" class="hover:text-purple-300 transition text-sm sm:text-base">Home</a>       
+            {% if user.is_authenticated %}
+                <a href="/dashboard/" class="hover:text-purple-300 transition text-sm sm:text-base">Dashboard</a>
+                <a href="/profile/" class="flex items-center space-x-2">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover" alt="{{ user.username }}">
+                    {% else %}
+                        <div class="profile-img text-sm w-8 h-8 sm:w-10 sm:h-10 text-xs sm:text-sm flex items-center justify-center">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                        
+            {% endif %}
+                    <span class="hidden sm:inline text-sm">{{ user.username }}</span>
+                </a>
+                <a href="/logout/" class="bg-red-500/20 text-red-300 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm hover:bg-red-500/30 transition">Logout</a>
+                <a href="{% url 'trash' %}" class="text-gray-700 hover:text-gray-900">Trash</a> 
+            {% else %}
+                <a href="/login/" class="text-purple-300 hover:text-purple-200 transition text-sm sm:text-base">Login</a>
+                <a href="/signup/" class="bg-purple-600 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm hover:bg-purple-700 transition">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <!-- Welcome modal (triggered by ?welcome=true) -->
+    {% if request.GET.welcome %}
+    <div id="welcome-modal" class="welcome-modal">
+        Welcome, {{ user.username }} 👋
+    </div>
+    <script>
+        setTimeout(() => {
+            const modal = document.getElementById('welcome-modal');
+            if(modal) modal.style.display = 'none';
+        }, 4000);
+    </script>
+    {% endif %}
+
+    <script>
+        // Show toast messages from Django messages
+        function showToast(message, type='success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // Display Django messages as toasts
+        {% if messages %}
+            {% for message in messages %}
+                showToast('{{ message|escapejs }}', '{{ message.tags }}');
+            {% endfor %}
+        {% endif %}
+    </script>
+    {% block extra_js %}{% endblock %}
+    <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement; // or use body
+
+    // Function to set theme
+    function setTheme(theme) {
+        if (theme === 'light') {
+            document.documentElement.classList.add('light');
+            themeToggle.innerHTML = '☀️';
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.classList.remove('light');
+            themeToggle.innerHTML = '🌙';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        setTheme('light');
+    } else {
+        setTheme('dark'); // default dark
+    }
+
+    // Toggle on click
+    themeToggle.addEventListener('click', () => {
+        const isLight = document.documentElement.classList.contains('light');
+        setTheme(isLight ? 'dark' : 'light');
+    });
+</script>
+</body>
+</html>

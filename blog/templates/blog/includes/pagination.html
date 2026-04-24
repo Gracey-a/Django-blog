@@ -1,0 +1,13 @@
+{% if is_paginated %}
+<div class="flex justify-center mt-8 space-x-2">
+    {% if page_obj.has_previous %}
+        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">Prev</a>
+    {% endif %}
+    <span class="px-4 py-2 bg-purple-600 rounded-full">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">Next</a>
+        <a href="?page={{ paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">Last</a>
+    {% endif %}
+</div>
+{% endif %}

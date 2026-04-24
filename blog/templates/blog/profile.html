@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto glass-card p-8 text-center">
+    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500 mb-4">
+        {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="w-full h-full object-cover">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-4xl font-bold">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+        {% endif %}
+    </div>
+    <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+    <p class="text-gray-400">{{ user.email }}</p>
+    {% if user.profile.bio %}
+        <p class="mt-4">{{ user.profile.bio }}</p>
+    {% endif %}
+    <p class="mt-2">Member since {{ user.date_joined|date:"F Y" }}</p>
+    <div class="mt-6">
+        <a href="{% url 'profile_edit' %}" class="bg-purple-600 px-4 py-2 rounded-full text-sm hover:bg-purple-700 transition">Edit Profile</a>
+    </div>
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Your Recent Posts</h2>
+        <ul class="space-y-2">
+            {% for post in user_posts %}
+                <li><a href="{{ post.get_absolute_url }}" class="text-purple-300 hover:underline">{{ post.title }}</a></li>
+            {% empty %}
+                <li>No posts yet.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'dashboard' %}" class="inline-block mt-4 text-purple-300">View all →</a>
+    </div>
+</div>
+{% endblock %}

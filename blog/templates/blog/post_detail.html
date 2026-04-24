@@ -1,0 +1,109 @@
+{% extends 'blog/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <article class="glass-card p-6">
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full rounded-xl mb-6">
+        {% endif %}
+        <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+        
+        <!-- Author-only status badge -->
+        {% if user == post.author and post.status != 'P' %}
+            <div class="bg-yellow-100 text-yellow-800 p-2 rounded mb-4">
+                This post is a <strong>draft</strong> – not visible to the public.
+            </div>
+        {% elif user == post.author and post.publish_date and post.publish_date > now %}
+            <div class="bg-blue-100 text-blue-800 p-2 rounded mb-4">
+                Scheduled for {{ post.publish_date|date:"M d, Y H:i" }} – not yet visible to the public.
+            </div>
+        {% endif %}
+        <div class="flex items-center text-gray-400 text-sm mb-6 flex-wrap gap-2">
+            <span>By <a href="{% url 'author_posts' post.author.username %}" class="hover:text-purple-300">{{ post.author.username }}</a></span>
+            <span>•</span>
+            <span>{{ post.created_at|date:"F j, Y, g:i a" }}</span>
+            <span>•</span>
+            <span>❤️ {{ post.total_likes }} likes</span>
+        </div>
+        {% if post.tags.all %}
+            <div class="mb-4 flex flex-wrap gap-1">
+                {% for tag in post.tags.all %}
+                    <span class="text-xs bg-white/10 px-2 py-1 rounded-full">#{{ tag }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if post.category %}
+            <div class="mb-4">
+                <span class="text-gray-600">Category:</span>
+                <a href="{% url 'category_posts' post.category.slug %}" class="text-blue-600 hover:underline">
+                    {{ post.category.name }}
+                </a>
+            </div>
+        {% endif %}
+        <div class="prose prose-invert max-w-none">
+            {{ post.content|safe }}
+        </div>
+
+        <!-- Like button -->
+        <div class="mt-6">
+            <a href="{% url 'like_post' post.pk %}" class="inline-flex items-center space-x-1 bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition">
+                {% if user in post.likes.all %}
+                    <span>❤️</span> <span>Liked</span>
+                {% else %}
+                    <span>🤍</span> <span>Like</span>
+                {% endif %}
+                <span>({{ post.total_likes }})</span>
+            </a>
+         
+            {% if post.likes.all %}
+                <div class="mt-2 text-sm text-gray-400">
+                    Liked by:
+                    {% for liker in post.likes.all %}
+                        {{ liker.username }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+       {% if user == post.author %}
+       <div class="mt-6 flex space-x-3">
+           <a href="{% url 'post_update' post.pk %}" class="text-blue-300 hover:text-blue-200">Edit Post</a>
+           <a href="{% url 'soft_delete_post' post.pk %}" class="text-red-300 hover:text-red-200" onclick="return confirm('Move to trash?');">Delete</a>
+    <!-- Optionally, keep the permanent delete only in trash -->
+       </div> 
+       {% endif %}
+
+    </article>
+
+    <!-- Comments Section -->
+    <div class="mt-8">
+        <h3 class="text-2xl font-bold mb-4">Comments ({{ post.comments.count }})</h3>
+    
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_comment' post.id %}" class="mb-6">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Post Comment</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a> to comment.</p>
+        {% endif %}
+
+        {% for comment in post.comments.all %}
+            <div class="bg-gray-50 p-4 rounded mb-4">
+                <div class="flex justify-between">
+                    <strong>{{ comment.author.username }}</strong>
+                    <small class="text-gray-500">{{ comment.created_at|date:"M d, Y H:i" }}</small>
+                </div>
+                <p class="mt-2">{{ comment.content }}</p>
+                {% if user == comment.author or user.is_staff %}
+                    <a href="{% url 'delete_comment' comment.id %}" class="text-red-500 text-sm hover:underline" onclick="return confirm('Delete comment?');">Delete</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No comments yet. Be the first!</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+

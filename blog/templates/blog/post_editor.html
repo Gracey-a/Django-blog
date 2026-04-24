@@ -1,0 +1,138 @@
+{% extends 'blog/base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Left column: main editor -->
+        <div class="flex-1">
+            <div class="dark-card p-6">
+                <h1 class="text-2xl font-bold mb-6">{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}</h1>
+                <form method="post" enctype="multipart/form-data" id="post-form">
+                    {% csrf_token %}
+
+                    <!-- Title -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-medium mb-2">Title</label>
+                        {{ form.title }}
+                    </div>
+
+                    <!-- Content (CKEditor) -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-medium mb-2">Content</label>
+                        {{ form.content }}
+                    </div>
+
+                    <!-- Featured Image -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-medium mb-2">Featured Image</label>
+                        {{ form.image }}
+                    </div>
+
+                    <!-- Hidden fields for other form fields we'll show in sidebar -->
+                    <!-- We'll manually render category, tags, status, publish_date in sidebar -->
+                </form>
+            </div>
+        </div>
+
+        <!-- Right column: Sidebar -->
+        <div class="w-full lg:w-80">
+        <div class="dark-card p-6 space-y-6">
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+            <button type="submit" form="post-form" name="action" value="publish" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                Publish
+            </button>
+            <button type="submit" form="post-form" name="action" value="draft" class="w-full bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300 transition">
+                Save as Draft
+            </button>
+            <button type="button" id="schedule-btn" class="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition">
+                Schedule post
+            </button>
+
+            {% if form.instance.pk %}
+                <button type="button" class="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition" onclick="duplicatePost()">
+                    Duplicate post
+                </button>
+                <button type="button" class="w-full bg-white border border-red-300 text-red-600 py-2 rounded-lg hover:bg-red-50 transition" onclick="deletePost()">
+                    Move to trash
+                </button>
+            {% endif %}
+        </div>
+
+        <!-- Post Settings -->
+        <div class="border-t pt-4">
+            <h3 class="font-semibold mb-3">Post Settings</h3>
+
+            <!-- Status -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-600 mb-1">Status</label>
+                {{ form.status }}
+            </div>
+
+            <!-- Publish Date (hidden by default) -->
+            <div id="schedule-date-group" class="mb-4 hidden">
+                <label class="block text-sm text-gray-600 mb-1">Publish Date</label>
+                {{ form.publish_date }}
+            </div>
+
+            <!-- Category (manual dropdown) -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-600 mb-1">Category</label>
+                <select name="category" class="w-full p-2 border rounded">
+                    <option value="">-- None --</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if form.instance.category.id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Tags -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-600 mb-1">Tags</label>
+                {{ form.tags }}
+            </div>
+
+            <!-- Notes (optional) -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-600 mb-1">Notes</label>
+                <textarea rows="3" class="w-full border rounded p-2" placeholder="Private notes..."></textarea>
+            </div>
+        </div>
+
+        <!-- Post History -->
+        <div class="border-t pt-4">
+            <h3 class="font-semibold mb-2">Post History</h3>
+            <div class="text-sm text-gray-500">No revisions yet.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle schedule date picker
+    document.getElementById('schedule-btn').addEventListener('click', function() {
+        const dateGroup = document.getElementById('schedule-date-group');
+        if (dateGroup) dateGroup.classList.toggle('hidden');
+    });
+
+    {% if form.instance.pk %}
+    function duplicatePost() {
+        if (confirm('Create a copy of this post as a draft?')) {
+            window.location.href = "{% url 'post_duplicate' form.instance.pk %}";
+        }
+    }
+
+    function deletePost() {
+        if (confirm('Are you sure you want to permanently delete this post?')) {
+            window.location.href = "{% url 'post_delete_permanent' form.instance.pk %}";
+        }
+    }
+    {% endif %}
+</script>
+{% endblock %}

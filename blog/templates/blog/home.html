@@ -1,0 +1,115 @@
+{% extends 'blog/base.html' %}
+{% block title %}Home – Elegant Blog{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    {# CTA Section #}
+    <div class="glass-card rounded-2xl p-8 mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            The Blog
+        </h1>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto mb-8">
+            Share your voice, spark conversations, and join a community of curious minds.
+        </p>
+        <div class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+	    <input type="text" value="✨ 📝 Ready to share your story?..... ✨" disabled 
+ 		   class="flex-1 px-5 py-3 rounded-full bg-white/10 border border-white/20 cursor-default opacity-80">
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_create' %}" 
+                   class="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:scale-105 transition shadow-lg text-center">
+                    ✨ Start Writing ✨
+                </a>
+            {% else %}
+                <a href="{% url 'signup' %}" 
+                   class="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:scale-105 transition shadow-lg text-center">
+                    ✨ Join & Write ✨
+                </a>
+            {% endif %}
+        </div>
+        <p class="text-gray-400 text-sm mt-4">
+            No spam, only inspiration. Unsubscribe anytime.
+        </p>
+    </div>
+
+    {# Posts Grid – 2 columns #}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for post in posts %}
+            <article class="glass-card rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col">
+                {% if post.image %}
+                    <a href="{% url 'post_detail' post.pk %}">
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" 
+                             class="w-full h-56 object-cover">
+                    </a>
+                {% else %}
+                    <div class="w-full h-56 bg-gray-800 flex items-center justify-center text-gray-500">
+                        📷
+                    </div>
+                {% endif %}
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center text-xs text-gray-400 mb-2 space-x-2">
+                        {% if post.category %}
+                            <a href="{% url 'category_posts' post.category.slug %}" class="text-purple-400 hover:underline">
+                                {{ post.category.name }}
+                            </a>
+                            <span>•</span>
+                        {% endif %}
+                        <span>{{ post.created_at|date:"M d, Y" }}</span>
+                        <span>•</span>
+                        <span>{{ post.content|striptags|wordcount|divisibleby:200|add:"1" }} min read</span>
+                    </div>
+                    <h2 class="text-xl font-bold mb-2 leading-tight">
+                        <a href="{% url 'post_detail' post.pk %}" class="hover:text-purple-400 transition">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">
+                        {{ post.content|striptags|truncatewords:20 }}
+                    </p>
+                    <div class="flex items-center justify-between mt-auto pt-3">
+                        <div class="flex items-center space-x-2">
+                            <div class="profile-img w-6 h-6 text-xs flex items-center justify-center">
+                                {{ post.author.username|slice:":1"|upper }}
+                            </div>
+                            <span class="text-xs">{{ post.author.username }}</span>
+                        </div>
+                        <a href="{% url 'post_detail' post.pk %}" class="text-purple-400 text-sm hover:underline">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="col-span-full text-center py-12">
+                No posts yet. 
+                {% if user.is_authenticated %}
+                    <a href="{% url 'post_create' %}" class="text-purple-400">Create the first one →</a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="text-purple-400">Sign up to start writing →</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Pagination #}
+    {% if is_paginated %}
+        <div class="mt-12 flex justify-center space-x-2">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" 
+                   class="px-4 py-2 rounded-full glass-card hover:bg-white/10 transition">
+                    ← Previous
+                </a>
+            {% endif %}
+            <span class="px-4 py-2 rounded-full bg-purple-600 text-white">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" 
+                   class="px-4 py-2 rounded-full glass-card hover:bg-white/10 transition">
+                    Next →
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

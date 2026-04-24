@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto glass-card p-8">
+    <h1 class="text-2xl font-bold mb-6">{% if form.instance.pk %}Edit Post{% else %}Create New Post{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-4">
+                <label class="block mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="text-red-400 text-sm">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Manual category dropdown -->
+        <div class="mb-4">
+            <label class="block mb-1">Category (optional)</label>
+            <select name="category" class="w-full p-2 border rounded">
+                <option value="">-- None --</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if form.instance.category.id == cat.id %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+  
+        <button type="submit" class="bg-purple-600 px-6 py-2 rounded-full hover:bg-purple-700 transition">Publish</button>
+    </form>
+</div>
+{% endblock %}
