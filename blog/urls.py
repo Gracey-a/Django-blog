@@ -17,6 +17,7 @@ urlpatterns = [
     path('post/<int:pk>/soft-delete/', views.soft_delete_post, name='soft_delete_post'),
     path('post/<int:pk>/restore/', views.restore_post, name='post_restore'),
     path('trash/', TrashView.as_view(), name='trash'),
+    path('subscribe/', views.subscribe, name='subscribe'),
 
     # User dashboards
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
