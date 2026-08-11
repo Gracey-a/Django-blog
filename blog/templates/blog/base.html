@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Google Analytics (replace G-XXXXXXXXXX with your Measurement ID) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -16,23 +15,10 @@
         gtag('config', 'G-XXXXXXXXXX');
     </script>
 
-    <!-- Custom styles -->
     <style>
-        /* Base styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
-        /* Dark mode (default) */
-        body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #f5f5f5;
-        }
-        /* Light mode */
-        html.light body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-            color: #1f2937;
-        }
+        body { font-family: 'Inter', sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #f5f5f5; }
+        html.light body { background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); color: #1f2937; }
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -40,18 +26,9 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
-        .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);
-        }
-        html.light .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: #1f2937;
-        }
-        html.light .glass-card:hover {
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
-        }
+        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3); }
+        html.light .glass-card { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.1); color: #1f2937; }
+        html.light .glass-card:hover { box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
 
         input, textarea, select {
             background: rgba(255,255,255,0.1) !important;
@@ -59,9 +36,7 @@
             color: white !important;
         }
         input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #a78bfa !important;
-            ring: 2px solid #a78bfa;
+            outline: none; border-color: #a78bfa !important;
         }
         html.light input, html.light textarea, html.light select {
             background: rgba(255, 255, 255, 0.9) !important;
@@ -70,57 +45,32 @@
         }
 
         .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            padding: 12px 24px; border-radius: 40px; color: white;
+            z-index: 1000; animation: slideIn 0.3s ease;
         }
-        html.light .toast {
-            background: rgba(0,0,0,0.8);
-            color: white;
-        }
+        html.light .toast { background: rgba(0,0,0,0.8); color: white; }
 
         .welcome-modal {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: fixed; top: 20px; right: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 50px;
+            color: white; padding: 16px 24px; border-radius: 50px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
-            z-index: 1001;
-            animation: fadeSlideDown 0.5s ease;
+            z-index: 1001; animation: fadeSlideDown 0.5s ease;
         }
-        html.light .welcome-modal {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
+        html.light .welcome-modal { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
 
         .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: white;
         }
 
         .dark-card {
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
             color: #f5f5f5;
         }
         html.light .dark-card {
@@ -129,24 +79,11 @@
             color: #1f2937;
         }
 
-        /* CKEditor dark mode overrides */
-        html:not(.light) .cke_editable {
-            background-color: #1f2937 !important;
-            color: #f5f5f5 !important;
-        }
-        html.light .cke_editable {
-            background-color: white !important;
-            color: #1f2937 !important;
-        }
+        html:not(.light) .cke_editable { background-color: #1f2937 !important; color: #f5f5f5 !important; }
+        html.light .cke_editable { background-color: white !important; color: #1f2937 !important; }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes fadeSlideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -158,9 +95,7 @@
             <a href="/" class="text-xl font-semibold tracking-tight">Elegant Blog</a>
         </div>
         <div class="flex items-center flex-wrap justify-center gap-3 sm:gap-4">
-            <button id="theme-toggle" class="text-gray-300 hover:text-purple-300 transition focus:outline-none text-lg">
-                🌙
-            </button>
+            <button id="theme-toggle" class="text-gray-300 hover:text-purple-300 transition focus:outline-none text-lg">🌙</button>
             <a href="/" class="hover:text-purple-300 transition text-sm sm:text-base">Home</a>
             {% if user.is_authenticated %}
                 <a href="/dashboard/" class="hover:text-purple-300 transition text-sm sm:text-base">Dashboard</a>
@@ -213,24 +148,14 @@
         </div>
     </footer>
 
-    <!-- Toast container -->
     <div id="toast-container"></div>
 
-    <!-- Welcome modal -->
     {% if request.GET.welcome %}
-    <div id="welcome-modal" class="welcome-modal">
-        Welcome, {{ user.username }} 👋
-    </div>
-    <script>
-        setTimeout(() => {
-            const modal = document.getElementById('welcome-modal');
-            if(modal) modal.style.display = 'none';
-        }, 4000);
-    </script>
+    <div id="welcome-modal" class="welcome-modal">Welcome, {{ user.username }} 👋</div>
+    <script>setTimeout(() => { const modal = document.getElementById('welcome-modal'); if(modal) modal.style.display = 'none'; }, 4000);</script>
     {% endif %}
 
     <script>
-        // Toast messages from Django messages
         function showToast(message, type='success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -246,7 +171,6 @@
         {% endif %}
     </script>
 
-    <!-- Theme toggle -->
     <script>
         const themeToggle = document.getElementById('theme-toggle');
         function setTheme(theme) {
@@ -267,7 +191,6 @@
             setTheme(isLight ? 'dark' : 'light');
         });
     </script>
-
     {% block extra_js %}{% endblock %}
 </body>
 </html>

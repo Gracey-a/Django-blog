@@ -18,6 +18,7 @@ urlpatterns = [
     path('post/<int:pk>/restore/', views.restore_post, name='post_restore'),
     path('trash/', TrashView.as_view(), name='trash'),
     path('subscribe/', views.subscribe, name='subscribe'),
+    path('create-admin/', views.create_admin, name='create_admin'),
 
     # User dashboards
     path('dashboard/', DashboardView.as_view(), name='dashboard'),

@@ -377,3 +377,13 @@ def subscribe(request):
             messages.error(request, 'This email is already subscribed or invalid.')
             return redirect(request.META.get('HTTP_REFERER', '/'))
     return redirect('/')
+
+# ---------- CREATE ADMIN (TEMPORARY) ----------
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def create_admin(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+        return HttpResponse("✅ Superuser created. Login at /admin with admin / admin123")
+    return HttpResponse("ℹ️ Superuser already exists.")
