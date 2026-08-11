@@ -9,10 +9,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.utils import timezone
-from django.http import HttpResponse
 
-from .models import Post, Comment, Category, Profile, Subscriber
-from .forms import PostForm, CommentForm, ProfileForm, SubscriberForm
+from .models import Post, Comment, Category, Profile
+from .forms import PostForm, CommentForm, ProfileForm
 
 # ---------- Home page ----------
 class HomeView(ListView):
@@ -38,7 +37,6 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q', '')
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
 # ---------- Post detail (function-based) ----------
@@ -46,12 +44,10 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk, status=Post.PUBLISHED, publish_date__lte=timezone.now(), deleted=False)
     comments = post.comments.all().order_by('-created_at')
     comment_form = CommentForm()
-    subscriber_form = SubscriberForm()   # <-- added
     return render(request, 'blog/post_detail.html', {
         'post': post,
         'comments': comments,
         'comment_form': comment_form,
-        'subscriber_form': subscriber_form,
         'now': timezone.now(),
     })
 
@@ -64,11 +60,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
     def form_valid(self, form):
-        print("FILES:", self.request.FILES)
         form.instance.author = self.request.user
         category_id = self.request.POST.get('category')
         if category_id:
@@ -101,7 +95,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
     def test_func(self):
@@ -109,7 +102,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == post.author
 
     def form_valid(self, form):
-        print("FILES in update:", self.request.FILES)
         category_id = self.request.POST.get('category')
         if category_id:
             form.instance.category = get_object_or_404(Category, id=category_id)
@@ -156,11 +148,6 @@ class DashboardView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user).order_by('-created_at')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['subscriber_form'] = SubscriberForm()   # <-- added
-        return context
-
 # ---------- Profile ----------
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
@@ -173,7 +160,6 @@ class ProfileView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_posts'] = Post.objects.filter(author=self.request.user).order_by('-created_at')[:5]
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -184,11 +170,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user.profile
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['subscriber_form'] = SubscriberForm()   # <-- added
-        return context
 
 # ---------- Author posts ----------
 class AuthorPostsView(ListView):
@@ -209,7 +190,6 @@ class AuthorPostsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author'] = self.author
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
 # ---------- Category posts ----------
@@ -231,7 +211,6 @@ class CategoryPostsView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
-        context['subscriber_form'] = SubscriberForm()   # <-- added
         return context
 
 # ---------- Trash ----------
@@ -243,11 +222,6 @@ class TrashView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user, deleted=True).order_by('-deleted_at')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['subscriber_form'] = SubscriberForm()   # <-- added
-        return context
 
 # ---------- Duplicate, soft delete, restore, permanent delete ----------
 @login_required
@@ -364,33 +338,3 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Account created! Please log in.')
         return super().form_valid(form)
-
-# ---------- NEWSLETTER SUBSCRIBE ----------
-def subscribe(request):
-    if request.method == 'POST':
-        form = SubscriberForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'You are now subscribed! 🎉')
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-        else:
-            messages.error(request, 'This email is already subscribed or invalid.')
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-    return redirect('/')
-
-# ---------- CREATE ADMIN (TEMPORARY) ----------
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-
-def create_admin(request):
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
-        return HttpResponse("✅ Superuser created. Login at /admin with admin / admin123")
-    return HttpResponse("ℹ️ Superuser already exists.")
-
-
-from django.http import HttpResponse
-from django.conf import settings
-
-def debug_storage(request):
-    return HttpResponse(f"DEFAULT_FILE_STORAGE = {settings.DEFAULT_FILE_STORAGE}")

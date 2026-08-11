@@ -7,18 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script>
-
     <style>
-        body { font-family: 'Inter', sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #f5f5f5; }
-        html.light body { background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); color: #1f2937; }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #f5f5f5;
+        }
+        html.light body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            color: #1f2937;
+        }
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -26,9 +27,18 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
-        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3); }
-        html.light .glass-card { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.1); color: #1f2937; }
-        html.light .glass-card:hover { box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);
+        }
+        html.light .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #1f2937;
+        }
+        html.light .glass-card:hover {
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+        }
 
         input, textarea, select {
             background: rgba(255,255,255,0.1) !important;
@@ -36,7 +46,8 @@
             color: white !important;
         }
         input:focus, textarea:focus, select:focus {
-            outline: none; border-color: #a78bfa !important;
+            outline: none;
+            border-color: #a78bfa !important;
         }
         html.light input, html.light textarea, html.light select {
             background: rgba(255, 255, 255, 0.9) !important;
@@ -45,32 +56,57 @@
         }
 
         .toast {
-            position: fixed; bottom: 20px; right: 20px;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-            padding: 12px 24px; border-radius: 40px; color: white;
-            z-index: 1000; animation: slideIn 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
         }
-        html.light .toast { background: rgba(0,0,0,0.8); color: white; }
+        html.light .toast {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
 
         .welcome-modal {
-            position: fixed; top: 20px; right: 20px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; padding: 16px 24px; border-radius: 50px;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 50px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
-            z-index: 1001; animation: fadeSlideDown 0.5s ease;
+            z-index: 1001;
+            animation: fadeSlideDown 0.5s ease;
         }
-        html.light .welcome-modal { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        html.light .welcome-modal {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
 
         .profile-img {
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
         }
 
         .dark-card {
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
             color: #f5f5f5;
         }
         html.light .dark-card {
@@ -79,11 +115,23 @@
             color: #1f2937;
         }
 
-        html:not(.light) .cke_editable { background-color: #1f2937 !important; color: #f5f5f5 !important; }
-        html.light .cke_editable { background-color: white !important; color: #1f2937 !important; }
+        html:not(.light) .cke_editable {
+            background-color: #1f2937 !important;
+            color: #f5f5f5 !important;
+        }
+        html.light .cke_editable {
+            background-color: white !important;
+            color: #1f2937 !important;
+        }
 
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -123,28 +171,10 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer with Newsletter -->
+    <!-- Simple footer -->
     <footer class="mt-16 border-t border-white/10 pt-8 pb-6 text-center">
         <div class="max-w-2xl mx-auto px-4">
-            <h3 class="text-xl font-bold mb-2">📬 Join the Newsletter</h3>
-            <p class="text-sm text-gray-400 mb-4">Get the latest posts straight to your inbox.</p>
-            <form method="post" action="{% url 'subscribe' %}" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-                {% csrf_token %}
-                {{ subscriber_form }}
-                <button type="submit" class="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:scale-105 transition">
-                    Subscribe
-                </button>
-            </form>
-            {% if messages %}
-                <div class="mt-4">
-                    {% for message in messages %}
-                        <p class="text-sm {% if message.tags == 'success' %}text-green-400{% else %}text-red-400{% endif %}">
-                            {{ message }}
-                        </p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <p class="text-xs text-gray-500 mt-4">&copy; 2026 Elegant Blog. Built with Django.</p>
+            <p class="text-sm text-gray-400 mb-4">&copy; 2026 Elegant Blog. Built with Django.</p>
         </div>
     </footer>
 

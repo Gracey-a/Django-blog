@@ -9,13 +9,10 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rak0%f$196^q!f+&b1g8rdo&0rdvet)^oe1k3v(yu!suzlu6r!')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
@@ -24,7 +21,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,7 +58,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blog.context_processors.subscriber_form',
+                # newsletter context processor removed
             ],
         },
     },
@@ -87,7 +83,6 @@ else:
         }
     }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -95,19 +90,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ---------- CLOUDINARY CONFIGURATION ----------
-# Cloudinary settings – all media (images) go here
+# ---------- CLOUDINARY ----------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dn5opu7w2'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '568573767446757'),
@@ -120,7 +112,6 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'uB7Zeyx0Kq-kXEe-lJbqysytVlY'),
 )
 
-# Tell Django to use Cloudinary for file storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # DO NOT set MEDIA_URL or MEDIA_ROOT – Cloudinary overrides them
@@ -130,7 +121,6 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# CKEditor settings
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Full',

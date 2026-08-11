@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 from .views import *
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     # Blog posts
@@ -17,8 +15,6 @@ urlpatterns = [
     path('post/<int:pk>/soft-delete/', views.soft_delete_post, name='soft_delete_post'),
     path('post/<int:pk>/restore/', views.restore_post, name='post_restore'),
     path('trash/', TrashView.as_view(), name='trash'),
-    path('subscribe/', views.subscribe, name='subscribe'),
-    path('create-admin/', views.create_admin, name='create_admin'),
 
     # User dashboards
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
@@ -35,9 +31,4 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', custom_logout, name='logout'),
     path('signup/', SignUpView.as_view(), name='signup'),
-
-    path('debug-storage/', views.debug_storage, name='debug_storage'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
