@@ -31,4 +31,6 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', custom_logout, name='logout'),
     path('signup/', SignUpView.as_view(), name='signup'),
+
+    path('test-storage/', views.test_storage, name='test_storage'),
 ]

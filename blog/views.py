@@ -338,3 +338,10 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Account created! Please log in.')
         return super().form_valid(form)
+
+
+from django.http import HttpResponse
+from django.conf import settings
+
+def test_storage(request):
+    return HttpResponse(f"DEFAULT_FILE_STORAGE = {settings.DEFAULT_FILE_STORAGE}")
