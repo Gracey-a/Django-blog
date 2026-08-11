@@ -387,3 +387,10 @@ def create_admin(request):
         User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
         return HttpResponse("✅ Superuser created. Login at /admin with admin / admin123")
     return HttpResponse("ℹ️ Superuser already exists.")
+
+
+from django.http import HttpResponse
+from django.conf import settings
+
+def debug_storage(request):
+    return HttpResponse(f"DEFAULT_FILE_STORAGE = {settings.DEFAULT_FILE_STORAGE}")
