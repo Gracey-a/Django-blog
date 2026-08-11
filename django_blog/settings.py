@@ -99,22 +99,24 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ---------- CLOUDINARY ----------
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dn5opu7w2'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '568573767446757'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'uB7Zeyx0Kq-kXEe-lJbqysytVlY'),
-}
+# ---------- CLOUDINARY (HARDCODED) ----------
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dn5opu7w2'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', '568573767446757'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'uB7Zeyx0Kq-kXEe-lJbqysytVlY'),
+    cloud_name="dn5opu7w2",
+    api_key="568573767446757",
+    api_secret="uB7Zeyx0Kq-kXEe-lJbqysytVlY"
 )
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dn5opu7w2',
+    'API_KEY': '568573767446757',
+    'API_SECRET': 'uB7Zeyx0Kq-kXEe-lJbqysytVlY',
+}
 
-# DO NOT set MEDIA_URL or MEDIA_ROOT – Cloudinary overrides them
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Authentication
 LOGIN_URL = '/login/'
